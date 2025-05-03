@@ -45,6 +45,12 @@ ggplot(data = cant_establecimientos_area, mapping = aes(x = area, y = count)) +
   scale_y_continuous(expand = expansion(mult = c(0.05, 0.3))) +
   labs(title = "Cantidad de establecimientos por área", x = "Área", y = "Cantidad de establecimientos")
 
+ggplot(data = cant_establecimientos_ambito, mapping = aes(x = ambito, y = count)) +
+  geom_col() +
+  scale_y_continuous(expand = expansion(mult = c(0.05, 0.005))) +
+  labs(title = "Cantidad de establecimientos por ámbito", x = "Ámbito", y = "Cantidad de establecimientos")
+
+
 #¿Cómo es la distribución de cantidad de establecimientos educativos en la PBA por
 #categoría, área y ámbito?
 
@@ -150,9 +156,3 @@ promedios <- datos_con_categorias %>%
     promedio_secciones = mean(secciones),
     desvio_secciones = sd(secciones)
   )
-
-
-ggplot(data = cant_establecimientos_ambito, mapping = aes(x = ambito, y = count)) +
-  geom_col() +
-  scale_y_continuous(expand = expansion(mult = c(0.05, 0.005))) +
-  labs(title = "Cantidad de establecimientos por ámbito", x = "Ámbito", y = "Cantidad de establecimientos")
