@@ -14,10 +14,9 @@ View(datos)
 
 cant_establecimientos_categoria <- datos %>%
   group_by(categoria) %>%
-  summarise(count=n()) %>%
-  filter(!(categoria == "S/Datos"))
+  summarise(count=n())
 
-# eliminamos los sin datos (explicar porque)
+#Notar que hay bastantes sin datos
 
 View(cant_establecimientos_categoria)
 
@@ -118,41 +117,23 @@ ggplot(data = datos, mapping = aes(x = matricula, y = secciones)) +
 #summarise(cantidad = n(), estudiantes = sum(matricula), secciones = sum(secciones))
 
 
-grandes <- promedios %>% filter(cantidad >= 500)
-chicas <- promedios %>% filter(cantidad < 500)
-
-# Crear la fila "Otro"
-otro <- chicas %>%
-  summarise(
-    dependencia = "Otro",
-    cantidad = sum(cantidad),
-    estudiantes = sum(estudiantes),
-    secciones = sum(secciones)
-  )
-
-# Unir todo
-promedios_final <- bind_rows(grandes, otro)
-
-promedios_final <- promedios_final %>% 
-  mutate(prom_estudiantes = estudiantes / cantidad, prom_secciones = secciones / cantidad)
-
-
-
 conteo_dependencia <- datos %>%
   count(dependencia, name = "cantidad")
 
 datos_con_categorias <- datos %>%
-  left_join(conteo_dependencia, by = "dependencia") %>%
-  mutate(dependencia_grupo = if_else(cantidad < 500, "Otro", dependencia))
+  left_join(conteo_dependencia, by = "dependencia") %>%  #Nos permite agregar la cantidad de establecimientos con esa dependencia para filtrar mas facil despues.
+  mutate(dependencia_grupo = if_else(cantidad < 500, "Otro", dependencia)) #Filtramos con un if else y le agregamos la columna del grupo asignado
 
 promedios <- datos_con_categorias %>%
   group_by(dependencia_grupo) %>%
   summarise(
     cantidad = n(),
     estudiantes = sum(matricula),
-    secciones = sum(secciones),
+    total_secciones = sum(secciones),
     promedio_matricula = mean(matricula),
     desvio_matricula = sd(matricula),
     promedio_secciones = mean(secciones),
     desvio_secciones = sd(secciones)
   )
+
+#Esto lo mostramos con una tabla y quiza con un grafico de barras con desvio.
