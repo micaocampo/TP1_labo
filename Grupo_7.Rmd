@@ -1,7 +1,7 @@
 ---
 title: "Trabajo Práctico 1 - Laboratorio de datos"
 author: "Micaela Ocampo - Victoria Vega - Lucía Soave - Sabrina López"
-date: "2025-05-05"
+date: "09-05-2025"
 geometry: margin = 1.5 cm
 output:
  html_document:
