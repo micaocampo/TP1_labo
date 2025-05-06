@@ -1,6 +1,6 @@
 ---
 title: "Trabajo Práctico 1 - Laboratorio de datos"
-author: "Micaela Ocampos - Victoria Vega - Lucía Soave - Sabrina López"
+author: "Micaela Ocampo - Victoria Vega - Lucía Soave - Sabrina López"
 date: "2025-05-05"
 geometry: margin = 1.5 cm
 output:
@@ -167,7 +167,7 @@ promedio_matricula_secciones <- datos %>%
 datos_matricula_filtrados <- datos %>%
   filter(matricula < 4000)
 
-ggplot(data = datos_filtrados_por_matricula, mapping = aes(x = matricula, y = secciones, color = modalidad)) +
+ggplot(data = datos_matricula_filtrados, mapping = aes(x = matricula, y = secciones, color = modalidad)) +
   geom_point(alpha = 0.2) +
   facet_wrap(~modalidad) +
     labs(
@@ -180,6 +180,7 @@ ggplot(data = datos_filtrados_por_matricula, mapping = aes(x = matricula, y = se
 
 ```{r, echo=FALSE}
 
+#Esto habiamos dicho de sacarlo
 datos_modalidad_promedio <- datos %>%
   group_by(modalidad) %>%
   summarise(promedio = mean(matricula)/mean(secciones)) #Ver si se puede agregar desvio
@@ -198,7 +199,7 @@ knitr::kable((datos_modalidad_promedio), caption = "Promedio por modalidad")
   *Discriminado por área*
   
 ```{r, echo=FALSE}
-ggplot(data = datos_filtrados_por_matricula, mapping = aes(x = matricula, y = secciones, color = area)) + 
+ggplot(data = datos_matricula_filtrados, mapping = aes(x = matricula, y = secciones, color = area)) + 
   geom_point(alpha = 0.3) +
   labs(
     title = "Relación entre matrícula y cantidad de secciones discriminado por área",
@@ -211,7 +212,7 @@ ggplot(data = datos_filtrados_por_matricula, mapping = aes(x = matricula, y = se
   *Discriminado por sector:*
   
 ```{r, echo=FALSE}
-ggplot(data = datos_filtrados_por_matricula, mapping = aes(x = matricula, y = secciones, color = sector)) + 
+ggplot(data = datos_matricula_filtrados, mapping = aes(x = matricula, y = secciones, color = sector)) + 
   geom_point(alpha = 0.3) +
   labs(
     title = "Relación entre matrícula y cantidad de secciones discriminado por sector",
