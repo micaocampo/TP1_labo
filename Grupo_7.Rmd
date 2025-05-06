@@ -9,7 +9,7 @@ output:
  df_print: paged
 ---
 
-###Introducción
+### Introducción
   En este trabajo práctico se interesa analizar datos relativos a la oferta de **establecimientos educativos** en la Provincia de Buenos Aires (PBA) y sus características. Los datos utilizados son provenientes de datos abiertos del Gobierno de la Provincia de Buenos Aires, específicamente, el conjunto de datos denominado *"Establecimientos educativos por modalidad y nivel"*, disponibles en el enlace: https://catalogo.datos.gba.gob.ar/dataset/establecimientos-educativos
   
   En particular, nos interesa responder las siguientes preguntas: 
@@ -20,7 +20,7 @@ output:
   D. ¿Cómo se caracteriza la oferta de turnos para cada uno de los niveles educativos? ¿Varía según área, sector y el tipo de dependencia?
   
 
-###Metodología
+### Metodología
   Los resultados en este informe son producto del análisis basado en el DER(1) diseñado en función de los datos requeridos para responder las preguntas clave que nos fueron establecidas y de su mapeo correspondiente al modelo relacional(2).
   
 ![1. DER](images/cool.jpg){width=60%} --insertar la imagen real del DER
@@ -62,7 +62,7 @@ knitr::kable((datos_faltantes), caption = "Datos faltantes")
 ```
 
 
-####A. Cantidad de establecimientos
+#### A. Cantidad de establecimientos
   Para determinar la cantidad de establecimientos en función de la categoría, del área y del ámbito utilizamos las siguientes funciones:
 
 ```{r}
@@ -80,7 +80,7 @@ cant_establecimientos_ambito <- datos %>% #cantidad de establecimientos en funci
 
 ```
 
-####B. Relación entre matrícula y cantidad de secciones
+#### B. Relación entre matrícula y cantidad de secciones
   Para determinar las relaciones entre la matrícula y la cantidad de secciones discriminando por modalidad, área y sector, fueron omitidos los siguientes 3 casos donde la matrícula es mayor a 4000 por cuestiones estéticas a la visualización:
   
 ```{r, echo=FALSE}
@@ -91,9 +91,9 @@ knitr::kable((datos_matricula_omitidos), caption = "Datos omitidos con matrícul
 ```
 
 
-###Resultados
+### Resultados
 
-####A. Cantidad de establecimientos
+#### A. Cantidad de establecimientos
 
   *Por categoría:*
 
@@ -222,18 +222,18 @@ ggplot(data = datos_matricula_filtrados, mapping = aes(x = matricula, y = seccio
 
 ```
 
-###Discusión
+### Discusión
 
-####A. Cantidad de establecimientos
+#### A. Cantidad de establecimientos
   Al comparar la cantidad de establecimientos por categoría notamos que la mayor cantidad corresponde a los de primera(8089), seguidos por los de la segunda(6011) y finalmente por los de tercera(5008), resulta interesante ver que hay 2503 establecimientos que no cuentan con una categoría.
   Con respecto a la distribución de Conurbano e Interior, vemos que las cantidades son parecidas, 9839 y 11772 respectivamente.
   Finalmente, si analizamos por ámbito, vemos que hay una gran diferencia entre la cantidad de establecimientos en el sector Urbano(el cual lleva la mayoría con 18458 establecimientos), con respecto a Rural Agrupado(1115) y Rural Disperso(2024). En el gráfico apenas se puede notar la inferencia de los establecimientos educativos en el sector itinerante ya que representan apenas una cantidad de 14 establecimientos.
   
   (Nota: podría ser interesante ver qué modalidad tienen esos 14 establecimientos itinerantes)
   
-####B. Relación entre matrícula y cantidad de secciones
+#### B. Relación entre matrícula y cantidad de secciones
 
   
 
-###Bibliografía
+### Bibliografía
 ???
