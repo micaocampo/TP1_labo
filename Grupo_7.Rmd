@@ -54,6 +54,14 @@ datos <- datos %>%
 
 ```
 
+  ¿Hay datos faltantes en el `data.frame`? Haciendo una tabla, vemos que no.
+```{r, echo=FALSE}
+datos_faltantes <- colSums(is.na(datos))
+
+knitr::kable((datos_faltantes), caption = "Datos faltantes")
+```
+
+
 ####A. Cantidad de establecimientos
   Para determinar la cantidad de establecimientos en función de la categoría, del área y del ámbito utilizamos las siguientes funciones:
 
@@ -73,7 +81,14 @@ cant_establecimientos_ambito <- datos %>% #cantidad de establecimientos en funci
 ```
 
 ####B. Relación entre matrícula y cantidad de secciones
-  Para determinar las relaciones entre la matrícula y la cantidad de secciones discriminando por modalidad, área y sector 
+  Para determinar las relaciones entre la matrícula y la cantidad de secciones discriminando por modalidad, área y sector, fueron omitidos los siguientes 3 casos donde la matrícula es mayor a 4000 por cuestiones estéticas a la visualización:
+  
+```{r, echo=FALSE}
+datos_matricula_omitidos <- datos %>%
+  filter(matricula >= 4000)
+
+knitr::kable((datos_matricula_omitidos), caption = "Datos omitidos con matrículas mayores a 4000")
+```
 
 
 ###Resultados
@@ -139,12 +154,16 @@ ggplot(data = datos, mapping = aes(x = matricula, y = secciones)) +
     title = "Relación entre matrícula y cantidad de secciones",
     x = "Matrícula",
     y = "Secciones")
-```
 
+promedio_matricula_secciones <- datos %>%
+  summarise(Promedio = mean(matricula)/mean(secciones))
+```
+  El promedio de la relación es `promedio_matricula_secciones` matrículas por cada sección.
+  Nota: En este gráfico y en el cálculo del promedio no se omitió ninguna observación.
 
   *Discriminado por modalidad:*
 
-```{r}
+```{r, echo=FALSE}
 datos_matricula_filtrados <- datos %>%
   filter(matricula < 4000)
 
@@ -157,46 +176,50 @@ ggplot(data = datos_filtrados_por_matricula, mapping = aes(x = matricula, y = se
     y = "Secciones")
 
 ```
-  Fueron omitidos los siguientes 3 casos donde la matrícula supera los 4000 por cuestiones estéticas a la visualización:
+
+
+```{r, echo=FALSE}
+
+datos_modalidad_promedio <- datos %>%
+  group_by(modalidad) %>%
+  summarise(promedio = mean(matricula)/mean(secciones)) #Ver si se puede agregar desvio
+
+ggplot(data = datos_modalidad_promedio, mapping = aes(x = modalidad, y = promedio, color = modalidad)) +
+  geom_col(alpha = 0.7) +
+  labs(
+    title = "Promedios de cada modalidad con respecto a la matrícula y secciones",
+    x = "Modalidad",
+    y = "Promedio")
+
+knitr::kable((datos_modalidad_promedio), caption = "Promedio por modalidad")
+
+```
+
+  *Discriminado por área*
   
 ```{r, echo=FALSE}
-datos_matricula_omitidos <- datos %>%
-  filter(matricula >= 4000)
-
-knitr::kable((datos_matricula_omitidos), caption = "Datos omitidos con matrículas mayores a 4000")
-```
-
-  Resulta interesante ver los casos en donde la modalidad es *Educación Especial* o *Psicología Comunitaria y Pedagogía Social*:
-
-```{r, echo=FALSE}
-datos_educacion_especial <- datos %>%
-  filter(modalidad == "Educación Especial")
-
-datos_pedagogia <- datos %>%
-  filter(modalidad == "Psicología Comunitaria y Pedagogía Social")
-
-ggplot(data = datos_educacion_especial, mapping = aes(x = matricula, y = secciones)) +
-  geom_point(alpha = 0.5, color = "green") +
+ggplot(data = datos_filtrados_por_matricula, mapping = aes(x = matricula, y = secciones, color = area)) + 
+  geom_point(alpha = 0.3) +
   labs(
-    title = "Matrícula vs. Secciones (Educación Especial)",
+    title = "Relación entre matrícula y cantidad de secciones discriminado por área",
     x = "Matrícula",
-    y = "Secciones")
-
-ggplot(data = datos_pedagogia, mapping = aes(x = matricula, y = secciones)) +
-  geom_point(alpha = 0.5, color = "deeppink") +
-  labs(
-    title = "Matrícula vs. Secciones (Psicología Comunitaria y Pedagogía Social)",
-    x = "Matrícula",
-    y = "Secciones")
-
+    y = "Secciones") +
+    facet_wrap(~area)
 
 ```
-
-
-  *Discriminado por área:*
   
   *Discriminado por sector:*
+  
+```{r, echo=FALSE}
+ggplot(data = datos_filtrados_por_matricula, mapping = aes(x = matricula, y = secciones, color = sector)) + 
+  geom_point(alpha = 0.3) +
+  labs(
+    title = "Relación entre matrícula y cantidad de secciones discriminado por sector",
+    x = "Matrícula",
+    y = "Secciones") +
+    facet_wrap(~sector)
 
+```
 
 ###Discusión
 
