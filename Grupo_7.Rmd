@@ -1,0 +1,215 @@
+---
+title: "Trabajo Práctico 1 - Laboratorio de datos"
+author: "Micaela Ocampos - Victoria Vega - Lucía Soave - Sabrina López"
+date: "2025-05-05"
+geometry: margin = 1.5 cm
+output:
+ html_document:
+ pdf_document: default
+ df_print: paged
+---
+
+###Introducción
+  En este trabajo práctico se interesa analizar datos relativos a la oferta de **establecimientos educativos** en la Provincia de Buenos Aires (PBA) y sus características. Los datos utilizados son provenientes de datos abiertos del Gobierno de la Provincia de Buenos Aires, específicamente, el conjunto de datos denominado *"Establecimientos educativos por modalidad y nivel"*, disponibles en el enlace: https://catalogo.datos.gba.gob.ar/dataset/establecimientos-educativos
+  
+  En particular, nos interesa responder las siguientes preguntas: 
+  
+  A. ¿Cómo es la distribución de cantidad de establecimientos educativos en la PBA por categoría, área y ámbito? 
+  B. ¿Existe alguna relación entre la matrícula y la cantidad de secciones de un establecimiento? ¿Qué ocurre si se analiza discriminando por modalidad, área, sector, etc.?  
+  C. ¿Cuántos estudiantes y cuántas secciones tienen en promedio los establecimientos de una misma dependencia? ¿Cómo es la variabilidad? En especial, interesa analizar las dependencias que tengan más de 500 establecimientos bajo su órbita, mientras que el resto puede ser analizado en conjunto como una categoría “otro” (en referencia a otro tipo de dependencia). 
+  D. ¿Cómo se caracteriza la oferta de turnos para cada uno de los niveles educativos? ¿Varía según área, sector y el tipo de dependencia?
+  
+
+###Metodología
+  Los resultados en este informe son producto del análisis basado en el DER(1) diseñado en función de los datos requeridos para responder las preguntas clave que nos fueron establecidas y de su mapeo correspondiente al modelo relacional(2).
+  
+![1. DER](images/cool.jpg){width=60%} --insertar la imagen real del DER
+  
+  El mapeo del DER al modelo relacional se adjunta también a continuación:
+  
+![2. Modelo relacional del DER](images/cool.jpg){width=60%} --insertar la imagen real del modelo relacional
+
+  Para responder las preguntas clave, creamos un `data.frame` llamado `datos` con las variables correspondientes a:
+  
+  *Modalidad*: modalidad educativa (ejemplo: educación especial, común, etc.) 
+  *Área*: refiere a si es conurbano o interior 
+  *Sector*: Ámbito de gestión del establecimiento (ejemplo: privado, estatal, etc.) 
+  *Dependencia*: Jurisdicción de la que dependen normativamente (oficial, municipal, privada, nacional, u otros organismos). 
+  *Ámbito*: Refiere a si es ámbito urbano, rural disperso, rural agrupado, o itinerante. 
+  *Categoría*: Clasificación según pautas de organización y otras características de los niveles educativos (existen establecimientos de primera, segunda, y tercera categoría). 
+  *Secciones*: Cantidad de grupos escolares organizados (pueden pensarlo como cantidad de cursos por escuela). 
+  *Matrícula*: Cantidad de alumnos registrados en una unidad educativa
+  *Turnos*: Jornadas escolares durante las cuales opera el establecimiento (ejemplo: mañana, tarde, vespertino, etc.) 
+  *Nivel*: Nivel educativo (ejemplo: inicial, primario, secundario, etc.) 
+  *Dependencia*: Jurisdicción de la que dependen normativamente (ejemplo: municipal, nacional, etc.)
+    
+```{r, echo=FALSE}
+library(dplyr)
+library(ggplot2)
+
+datos <- read.csv("establecimientos_educativos.csv", header = T, sep=",", dec=".")
+
+datos <- datos %>%
+  select(establecimiento_id, establecimiento_nombre, modalidad, nivel, sector, dependencia, categoria, area, ambito, matricula, secciones, turnos)
+
+```
+
+####A. Cantidad de establecimientos
+  Para determinar la cantidad de establecimientos en función de la categoría, del área y del ámbito utilizamos las siguientes funciones:
+
+```{r}
+cant_establecimientos_categoria <- datos %>% #cantidad de establecimientos en función de la categoría
+  group_by(categoria) %>%
+  summarise(count=n())
+
+cant_establecimientos_area <- datos %>% #cantidad de establecimientos en función del area
+  group_by(area) %>%
+  summarise(count=n())
+
+cant_establecimientos_ambito <- datos %>% #cantidad de establecimientos en función del ámbito
+  group_by(ambito) %>%
+  summarise(count=n())
+
+```
+
+####B. Relación entre matrícula y cantidad de secciones
+  Para determinar las relaciones entre la matrícula y la cantidad de secciones discriminando por modalidad, área y sector 
+
+
+###Resultados
+
+####A. Cantidad de establecimientos
+
+  *Por categoría:*
+
+```{r, echo=FALSE}
+ggplot(data = cant_establecimientos_categoria, mapping = aes(x = categoria, y = count)) + 
+  geom_col(fill = "darksalmon", alpha = 0.7) + 
+  scale_y_continuous(expand = expansion(mult = c(0.05, 0.4))) +
+  labs(
+    title = "Cantidad de establecimientos por categoría",
+    x = "Categoría",
+    y = "Cantidad de establecimientos")
+
+```
+
+```{r, echo=FALSE}
+knitr::kable((cant_establecimientos_categoria), caption = "Cantidad de establecimientos por categoría")
+```
+
+  *Por área:*
+  
+```{r, echo=FALSE}
+ggplot(data = cant_establecimientos_area, mapping = aes(x = area, y = count)) +
+  geom_col(fill = "skyblue", alpha = 0.7) +
+  scale_y_continuous(expand = expansion(mult = c(0.05, 0.3))) +
+  labs(
+    title = "Cantidad de establecimientos por área",
+    x = "Área",
+    y = "Cantidad de establecimientos")
+```
+
+```{r, echo=FALSE}
+knitr::kable((cant_establecimientos_area), caption = "Cantidad de establecimientos por área")
+```
+  
+  *Por ámbito:*
+  
+```{r, echo=FALSE}
+ggplot(data = cant_establecimientos_ambito, mapping = aes(x = ambito, y = count)) +
+  geom_col(fill = "chartreuse", alpha = 0.7) + 
+  scale_y_continuous(expand = expansion(mult = c(0.05, 0.005))) +
+  labs(
+    title = "Cantidad de establecimientos por ámbito",
+    x = "Ámbito",
+    y = "Cantidad de establecimientos")
+
+```
+
+```{r, echo=FALSE}
+knitr::kable((cant_establecimientos_ambito), caption = "Cantidad de establecimientos por ámbito")
+```
+
+####B. Relación entre matrícula y cantidad de secciones
+
+```{r, echo=FALSE}
+ggplot(data = datos, mapping = aes(x = matricula, y = secciones)) + 
+  geom_point(alpha = 0.3, color = "blue") +
+  labs(
+    title = "Relación entre matrícula y cantidad de secciones",
+    x = "Matrícula",
+    y = "Secciones")
+```
+
+
+  *Discriminado por modalidad:*
+
+```{r}
+datos_matricula_filtrados <- datos %>%
+  filter(matricula < 4000)
+
+ggplot(data = datos_filtrados_por_matricula, mapping = aes(x = matricula, y = secciones, color = modalidad)) +
+  geom_point(alpha = 0.2) +
+  facet_wrap(~modalidad) +
+    labs(
+    title = "Relación entre matrícula y cantidad de secciones discriminado por modalidad",
+    x = "Matrícula",
+    y = "Secciones")
+
+```
+  Fueron omitidos los siguientes 3 casos donde la matrícula supera los 4000 por cuestiones estéticas a la visualización:
+  
+```{r, echo=FALSE}
+datos_matricula_omitidos <- datos %>%
+  filter(matricula >= 4000)
+
+knitr::kable((datos_matricula_omitidos), caption = "Datos omitidos con matrículas mayores a 4000")
+```
+
+  Resulta interesante ver los casos en donde la modalidad es *Educación Especial* o *Psicología Comunitaria y Pedagogía Social*:
+
+```{r, echo=FALSE}
+datos_educacion_especial <- datos %>%
+  filter(modalidad == "Educación Especial")
+
+datos_pedagogia <- datos %>%
+  filter(modalidad == "Psicología Comunitaria y Pedagogía Social")
+
+ggplot(data = datos_educacion_especial, mapping = aes(x = matricula, y = secciones)) +
+  geom_point(alpha = 0.5, color = "green") +
+  labs(
+    title = "Matrícula vs. Secciones (Educación Especial)",
+    x = "Matrícula",
+    y = "Secciones")
+
+ggplot(data = datos_pedagogia, mapping = aes(x = matricula, y = secciones)) +
+  geom_point(alpha = 0.5, color = "deeppink") +
+  labs(
+    title = "Matrícula vs. Secciones (Psicología Comunitaria y Pedagogía Social)",
+    x = "Matrícula",
+    y = "Secciones")
+
+
+```
+
+
+  *Discriminado por área:*
+  
+  *Discriminado por sector:*
+
+
+###Discusión
+
+####A. Cantidad de establecimientos
+  Al comparar la cantidad de establecimientos por categoría notamos que la mayor cantidad corresponde a los de primera(8089), seguidos por los de la segunda(6011) y finalmente por los de tercera(5008), resulta interesante ver que hay 2503 establecimientos que no cuentan con una categoría.
+  Con respecto a la distribución de Conurbano e Interior, vemos que las cantidades son parecidas, 9839 y 11772 respectivamente.
+  Finalmente, si analizamos por ámbito, vemos que hay una gran diferencia entre la cantidad de establecimientos en el sector Urbano(el cual lleva la mayoría con 18458 establecimientos), con respecto a Rural Agrupado(1115) y Rural Disperso(2024). En el gráfico apenas se puede notar la inferencia de los establecimientos educativos en el sector itinerante ya que representan apenas una cantidad de 14 establecimientos.
+  
+  (Nota: podría ser interesante ver qué modalidad tienen esos 14 establecimientos itinerantes)
+  
+####B. Relación entre matrícula y cantidad de secciones
+
+  
+
+###Bibliografía
+???
