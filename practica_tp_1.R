@@ -1,6 +1,7 @@
 ## ej 3
 library(dplyr)
 library(ggplot2)
+library(patchwork) #agregar a bibliografia
 
 datos <- read.csv("establecimientos_educativos.csv", header = T, sep=",", dec=".")
 
@@ -15,8 +16,6 @@ View(datos)
 cant_establecimientos_categoria <- datos %>%
   group_by(categoria) %>%
   summarise(count=n())
-
-#Notar que hay bastantes sin datos
 
 View(cant_establecimientos_categoria)
 
@@ -46,7 +45,7 @@ ggplot(data = cant_establecimientos_area, mapping = aes(x = area, y = count)) +
 
 ggplot(data = cant_establecimientos_ambito, mapping = aes(x = ambito, y = count)) +
   geom_col() +
-  scale_y_continuous(expand = expansion(mult = c(0.05, 0.005))) +
+  scale_y_continuous(expand = expansion(mult = c(0.05, 0.0))) +
   labs(title = "Cantidad de establecimientos por ámbito", x = "Ámbito", y = "Cantidad de establecimientos")
 
 
@@ -64,27 +63,12 @@ ggplot(data = cant_establecimientos_ambito, mapping = aes(x = ambito, y = count)
 #establecimiento. ¿Qué ocurre si se analiza discriminando por modalidad, área,
 #sector, etc.?
 
-ggplot(data = datos, mapping = aes(x = matricula, y = secciones)) +
-  geom_point(alpha = 0.2) +
-  xlim(0, 4000) +
-  ylim(0, 200)
+#FILTRAR SECCIONES = 0 A PARTIR DE ACA
 
-ggplot(data = datos, mapping = aes(x = matricula, y = secciones)) + 
+p2 <- ggplot(data = datos, mapping = aes(x = matricula, y = secciones)) + 
   geom_point(alpha = 0.2)
 
-#Claramente a mayor matricula, mayor numero de secciones. Despues le preguntamos a chatgpt si hay manera de hacer esto en un mismo grafico.
-
-
-datos2 <- na.omit(datos)
-
-datos_modalidad <- datos2 %>% group_by(modalidad) %>% summarise(promedio = mean(matricula)/mean(secciones)) #Ver si se puede agregar desvio
-
-ggplot(data = datos_modalidad, mapping = aes(x = modalidad, y = promedio)) +
-  geom_col()
-
 #Ver label para eje x
-
-#Para la modalidad Educacion especial no hay datos de secciones (son todos 0). Ver que hacer. Excluir del analisis.
 
 ggplot(data = datos, mapping = aes(x = matricula, y = secciones)) +
   geom_point() +
@@ -111,11 +95,8 @@ ggplot(data = datos, mapping = aes(x = matricula, y = secciones)) +
 #las dependencias que tengan más de 500 establecimientos bajo su órbita, mientras
 #que el resto puede ser analizado en conjunto como una categoría “otro” (en referencia a otro tipo de dependencia).
 
-#promedios <- datos %>% 
-  #group_by(dependencia) %>%
-  
-#summarise(cantidad = n(), estudiantes = sum(matricula), secciones = sum(secciones))
-
+datos_matricula_filtrados <- datos %>%
+  filter(matricula < 4000)
 
 conteo_dependencia <- datos %>%
   count(dependencia, name = "cantidad")
@@ -133,7 +114,21 @@ promedios <- datos_con_categorias %>%
     promedio_matricula = mean(matricula),
     desvio_matricula = sd(matricula),
     promedio_secciones = mean(secciones),
-    desvio_secciones = sd(secciones)
+    desvio_secciones = sd(secciones) #Ver que secciones = 0 es dato faltante (son las especiales). 
   )
 
-#Esto lo mostramos con una tabla y quiza con un grafico de barras con desvio.
+p1 <- ggplot(data = datos_con_categorias, mapping = aes(x = dependencia_grupo, y = matricula)) +
+  geom_violin() +
+  geom_point(data = promedios, mapping = aes(x = dependencia_grupo, y = promedio_matricula), color = "skyblue", size = 3)
+
+p2 <- ggplot(data = datos_con_categorias, mapping = aes(x = dependencia_grupo, y = matricula)) +
+  geom_violin() +
+  ylim(0, 2000) + 
+  geom_point(data = promedios, mapping = aes(x = dependencia_grupo, y = promedio_matricula), color = "skyblue", size = 3)
+
+p1+p2
+
+#Hacer esto mismo para secciones
+
+
+
