@@ -4,69 +4,59 @@ author: "Micaela Ocampo - Victoria Vega - Lucía Soave - Sabrina López"
 date: "09-05-2025"
 geometry: margin = 1.5 cm
 output:
- html_document:
  pdf_document: default
+ html_document:
  df_print: paged
 ---
 
 ### Introducción
- Los resultados en este informe son el producto de un análisis de datos relacionados a la oferta de establecimientos educativos en la Provincia de Buenos Aires, utilizaremos el Dataset "Establecimientos educativos por modalidad y nivel", que proviene de datos abiertos del Gobierno de la Provincia de Buenos Aires, y se pueden encontrar en el siguiente enlace: https://catalogo.datos.gba.gob.ar/dataset/establecimientos-educativos.
- 
 
- Nos interesa analizar como varía la oferta de establecimientos dependiendo de distintas características, como por ejemplo para ciertas ubicaciónes, turnos o modalidades. También informaremos sobre como se conforman en general los establecimientos, cuantos alumnos tienen y la división de estos en distintas secciones.
+Los resultados en este informe son el producto de un análisis de datos relacionados a la oferta de establecimientos educativos en la Provincia de Buenos Aires, utilizaremos el Dataset "Establecimientos educativos por modalidad y nivel", que proviene de datos abiertos del Gobierno de la Provincia de Buenos Aires, y se pueden encontrar en el siguiente enlace: <https://catalogo.datos.gba.gob.ar/dataset/establecimientos-educativos>.
 
+Nos interesa analizar como varía la oferta de establecimientos dependiendo de distintas características, como por ejemplo para ciertas ubicaciónes, turnos o modalidades. También informaremos sobre como se conforman en general los establecimientos, cuantos alumnos tienen y la división de estos en distintas secciones.
 
-  En particular, nos interesa responder las siguientes preguntas: 
-  
-  A. ¿Cómo es la distribución de cantidad de establecimientos educativos en la PBA por categoría, área y ámbito? 
-  
-  B. ¿Existe alguna relación entre la matrícula y la cantidad de secciones de un establecimiento? ¿Qué ocurre si se analiza discriminando por modalidad, área, sector, etc.?  
-  
-  C. ¿Cuántos estudiantes y cuántas secciones tienen en promedio los establecimientos de una misma dependencia? ¿Cómo es la variabilidad? En especial, interesa analizar las dependencias que tengan más de 500 establecimientos bajo su órbita, mientras que el resto puede ser analizado en conjunto como una categoría “otro” (en referencia a otro tipo de dependencia). 
-  
-  
-  D. ¿Cómo se caracteriza la oferta de turnos para cada uno de los niveles educativos? ¿Varía según área, sector y el tipo de dependencia?
-  
-  
-Utilizamos como herramienta principal el lenguaje de programacion R, R markdown y ggplot2 para los gráficos.
+En particular, nos interesa responder las siguientes preguntas:
 
+A. ¿Cómo es la distribución de cantidad de establecimientos educativos en la PBA por categoría, área y ámbito?
+
+B. ¿Existe alguna relación entre la matrícula y la cantidad de secciones de un establecimiento? ¿Qué ocurre si se analiza discriminando por modalidad, área, sector, etc.?
+
+C. ¿Cuántos estudiantes y cuántas secciones tienen en promedio los establecimientos de una misma dependencia? ¿Cómo es la variabilidad? En especial, interesa analizar las dependencias que tengan más de 500 establecimientos bajo su órbita, mientras que el resto puede ser analizado en conjunto como una categoría “otro” (en referencia a otro tipo de dependencia).
+
+D. ¿Cómo se caracteriza la oferta de turnos para cada uno de los niveles educativos? ¿Varía según área, sector y el tipo de dependencia?
 
 ### Metodología
-  Los resultados en este informe son producto del análisis basado en el DER(1) diseñado en función de los datos requeridos para responder las preguntas clave que nos fueron establecidas y de su mapeo correspondiente al modelo relacional(2).
-  
-![1. DER](images/cool.jpg){width=60%} --insertar la imagen real del DER
-  
-  El mapeo del DER al modelo relacional se adjunta también a continuación:
-  
-![2. Modelo relacional del DER](images/cool.jpg){width=60%} --insertar la imagen real del modelo relacional
 
-  Para responder las preguntas clave, creamos un `data.frame` llamado `datos` con las variables correspondientes a:
-  
-  *Modalidad*: modalidad educativa (ejemplo: educación especial, común, etc.).
-  
-  *Área*: refiere a si es conurbano o interior.
-  
-  *Sector*: Ámbito de gestión del establecimiento (ejemplo: privado, estatal, etc.).
-  
-  *Dependencia*: Jurisdicción de la que dependen normativamente (oficial, municipal, privada, nacional, u otros organismos). 
-  
-  *Ámbito*: Refiere a si es ámbito urbano, rural disperso, rural agrupado, o itinerante. 
-  
-  *Categoría*: Clasificación según pautas de organización y otras características de los niveles educativos (existen establecimientos de primera, segunda, y tercera categoría). 
-  
-  *Secciones*: Cantidad de grupos escolares organizados (pueden pensarlo como cantidad de cursos por escuela). 
-  
-  *Matrícula*: Cantidad de alumnos registrados en una unidad educativa.
-  
-  *Turnos*: Jornadas escolares durante las cuales opera el establecimiento (ejemplo: mañana, tarde, vespertino, etc.).
-  
-  *Nivel*: Nivel educativo (ejemplo: inicial, primario, secundario, etc.).
-  
-  *Dependencia*: Jurisdicción de la que dependen normativamente (ejemplo: municipal, nacional, etc.).
-    
+Utilizamos como herramienta principal el lenguaje de programacion R, R markdown y ggplot2 para los gráficos.
+
+Para responder las preguntas clave, creamos un `data.frame` llamado `datos` con las variables correspondientes a:
+
+*Modalidad*: modalidad educativa (ejemplo: educación especial, común, etc.).
+
+*Área*: refiere a si es conurbano o interior.
+
+*Sector*: Ámbito de gestión del establecimiento (ejemplo: privado, estatal, etc.).
+
+*Dependencia*: Jurisdicción de la que dependen normativamente (oficial, municipal, privada, nacional, u otros organismos).
+
+*Ámbito*: Refiere a si es ámbito urbano, rural disperso, rural agrupado, o itinerante.
+
+*Categoría*: Clasificación según pautas de organización y otras características de los niveles educativos (existen establecimientos de primera, segunda, y tercera categoría).
+
+*Secciones*: Cantidad de grupos escolares organizados (pueden pensarlo como cantidad de cursos por escuela).
+
+*Matrícula*: Cantidad de alumnos registrados en una unidad educativa.
+
+*Turnos*: Jornadas escolares durante las cuales opera el establecimiento (ejemplo: mañana, tarde, vespertino, etc.).
+
+*Nivel*: Nivel educativo (ejemplo: inicial, primario, secundario, etc.).
+
+*Dependencia*: Jurisdicción de la que dependen normativamente (ejemplo: municipal, nacional, etc.).
+
 ```{r, include=FALSE}
 library(dplyr)
 library(ggplot2)
+library(kableExtra)
 
 datos <- read.csv("establecimientos_educativos.csv", header = T, sep=",", dec=".")
 
@@ -74,10 +64,11 @@ datos <- datos %>%
   select(establecimiento_id, establecimiento_nombre, modalidad, nivel, sector, dependencia, categoria, area, ambito, matricula, secciones, turnos)
 
 ```
-----------------
-  Obtenemos el data frame con los datos sobre los establecimientos educativos, y vemos si hay datos faltantes:
-  
-  Contamos como datos faltantes todos los casilleros que esten vacíos o que digan S/Datos, además, los turnos que incluyen "SIN INFORMACIÓN" y las secciones con numero 0, ya que lo tomamos como dato vacío, pues en el caso de no estar dividido por secciones, se lo considera con 1 sección.
+
+Obtenemos el data frame con los datos sobre los establecimientos educativos, y vemos si hay datos faltantes:
+
+Contamos como datos faltantes todos los casilleros que esten vacíos o que digan S/Datos, además, los turnos que incluyen "SIN INFORMACIÓN" y las secciones con numero 0, ya que lo tomamos como dato vacío, pues en el caso de no estar dividido por secciones, se lo considera con 1 sección.
+
 ```{r, echo=FALSE}
 datos_faltantes <- colSums(is.na(datos) |
                              datos == "S/Datos" | 
@@ -97,12 +88,31 @@ datos_faltantes["secciones"] <- sum(datos$secciones == 0)
 knitr::kable((datos_faltantes), caption = "Datos faltantes")
 ```
 
-Podemos ver que en turnos y especialmente en categoría y secciones tenemos muchos datos faltantes, esto puede generar problemas en el momento de analizar los datos nos interesan, ya que la información que obtengamos será más propensa a tener errores o problemas de exactitud.
+Podemos ver que en turnos y especialmente en categoría y secciones tenemos muchos datos faltantes, esto puede generar problemas en el momento de analizar los datos que nos interesan, ya que la información que obtengamos será más propensa a tener errores o problemas de exactitud.
 
-#### A. Distribución en la cantidad de establecimientos
-  Para determinar la cantidad de establecimientos en función de la categoría, del área y del ámbito utilizamos las siguientes funciones:
+#### Parte A. 
 
-```{r}
+Creamos un DER con los datos que vamos a utilizar para visualizar como se relacionan e interactúan las entidades entre sí.
+
+![DER](DER.jpg){width=60%}
+
+Suponemos que:
+
+- Para cada modalidad debe existir al menos un establecimiento que tenga este tipo.
+
+- Todo establecimiento debe ofrecer al menos un turno.
+
+El mapeo del DER al modelo relacional se adjunta también a continuación:
+
+![Modelo relacional](Modelo_relacional.jpg){width=70%}
+
+------------------------------------------------------------------------
+
+#### Parte B.
+
+### Pregunta A. Distribución en la cantidad de establecimientos
+
+```{r, echo = FALSE}
 cant_establecimientos_categoria <- datos %>% #cantidad de establecimientos en función de la categoría
   group_by(categoria) %>%
   summarise(count=n())
@@ -117,9 +127,9 @@ cant_establecimientos_ambito <- datos %>% #cantidad de establecimientos en funci
 
 ```
 
-Y a partir de esto, creamos gráficos que nos muestren la información.
+A partir de los datos que tenemos, creamos gráficos que nos muestren la información.
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, fig.width=4, fig.height=3}
 ggplot(data = cant_establecimientos_categoria, mapping = aes(x = "", y = count, fill = categoria)) + 
   geom_bar(stat = "identity", width = 1, color = "white") +
   coord_polar("y", start = 0) +
@@ -128,7 +138,7 @@ ggplot(data = cant_establecimientos_categoria, mapping = aes(x = "", y = count, 
 
 ```
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, fig.width=4, fig.height=3}
 ggplot(data = cant_establecimientos_area, mapping = aes(x = "", y = count, fill = area)) +
   geom_bar(stat = "identity", width = 1, color = "white") +
   coord_polar("y", start = 0) +
@@ -137,7 +147,7 @@ ggplot(data = cant_establecimientos_area, mapping = aes(x = "", y = count, fill 
 
 ```
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, fig.width=4, fig.height=3}
 ggplot(data = cant_establecimientos_ambito, mapping = aes(x = "", y = count, fill = ambito)) +
   geom_bar(stat = "identity", width = 1) +
   coord_polar("y", start = 0) +
@@ -158,14 +168,17 @@ knitr::kable((cant_establecimientos_ambito), caption = "Cantidad de establecimie
 
 Vemos el porque del gráfico, hay tan solo 14 establecimientos educativos Itinerantes, mientras que urbanos, hay mas de 18.000.
 
-####  B. Relación entre matrícula y cantidad de secciones
-  Para determinar las relaciones entre la matrícula y la cantidad de secciones discriminando por modalidad, área y sector, fueron omitidos los siguientes 3 casos donde la matrícula es mayor a 4000 por cuestiones estéticas y para poder comprender mejor la información proporcionada:
-  
+#### Pregunta B. Relación entre matrícula y cantidad de secciones
+
+Para determinar las relaciones entre la matrícula y la cantidad de secciones discriminando por modalidad, área y sector, fueron omitidos los siguientes 3 casos donde la matrícula es mayor a 4000 para poder comprender mejor la información proporcionada:
+
 ```{r, echo=FALSE}
 datos_matricula_omitidos <- datos %>%
-  filter(matricula >= 4000)
+  filter(matricula >= 4000) %>%
+  select(establecimiento_id, modalidad, sector, dependencia, categoria, area, ambito, matricula, secciones)
 
-knitr::kable((datos_matricula_omitidos), caption = "Datos omitidos con matrículas mayores a 4000")
+knitr::kable((datos_matricula_omitidos), caption = "Datos omitidos con matrículas mayores a 4000") %>%
+  kable_styling(font_size = 7)
 ```
 
 ```{r, echo = FALSE}
@@ -173,7 +186,6 @@ knitr::kable((datos_matricula_omitidos), caption = "Datos omitidos con matrícul
 secciones_sin_NA <- datos %>%
   filter(secciones != 0)
 ```
-
 
 ```{r, echo=FALSE}
 ggplot(data = secciones_sin_NA, mapping = aes(x = matricula, y = secciones)) + 
@@ -186,10 +198,10 @@ ggplot(data = secciones_sin_NA, mapping = aes(x = matricula, y = secciones)) +
 promedio_matricula_secciones <- secciones_sin_NA %>%
   summarise(Promedio = mean(matricula)/mean(secciones))
 ```
-  
-  El promedio de la relación es `promedio_matricula_secciones` matrículas por cada sección.
 
-  *Discriminado por modalidad:*
+El promedio de la relación es `promedio_matricula_secciones` matrículas por cada sección.
+
+*Discriminado por modalidad:*
 
 ```{r, echo=FALSE}
 datos_matricula_filtrados <- secciones_sin_NA %>%
@@ -205,8 +217,8 @@ ggplot(data = datos_matricula_filtrados, mapping = aes(x = matricula, y = seccio
 
 ```
 
-  *Discriminado por área*
-  
+*Discriminado por área*
+
 ```{r, echo=FALSE}
 ggplot(data = datos_matricula_filtrados, mapping = aes(x = matricula, y = secciones, color = area)) + 
   geom_point(alpha = 0.3) +
@@ -217,9 +229,9 @@ ggplot(data = datos_matricula_filtrados, mapping = aes(x = matricula, y = seccio
     facet_wrap(~area)
 
 ```
-  
-  *Discriminado por sector:*
-  
+
+*Discriminado por sector:*
+
 ```{r, echo=FALSE}
 ggplot(data = datos_matricula_filtrados, mapping = aes(x = matricula, y = secciones, color = sector)) + 
   geom_point(alpha = 0.3) +
@@ -231,20 +243,42 @@ ggplot(data = datos_matricula_filtrados, mapping = aes(x = matricula, y = seccio
 
 ```
 
-####  C. Promedio de estudiantes y secciones en los establecimientos de una misma dependencia
+#### Pregunta C.
+
+Para responder esta pregunta seguimos filtrando los datos con matrícula mayor a 4.000, y utilizamos un grafico de tipo violin que nos permite ver cuando hay más cantidad de casos. El punto celeste nos índica el promedio.
+
+```{r, echo = FALSE}
+conteo_dependencia <- secciones_sin_NA %>%
+  count(dependencia, name = "cantidad")
+
+datos_con_categorias <- secciones_sin_NA %>%
+  left_join(conteo_dependencia, by = "dependencia") %>%  #Nos permite agregar la cantidad de establecimientos con esa dependencia para filtrar mas facil despues.
+  mutate(dependencia_grupo = if_else(cantidad < 500, "Otro", dependencia)) #Filtramos con un if else y le agregamos la columna del grupo asignado
+
+promedios <- datos_con_categorias %>%
+  group_by(dependencia_grupo) %>%
+  summarise(
+    cantidad = n(),
+    estudiantes = sum(matricula),
+    total_secciones = sum(secciones),
+    promedio_matricula = mean(matricula),
+    desvio_matricula = sd(matricula),
+    promedio_secciones = mean(secciones),
+    desvio_secciones = sd(secciones) 
+  )
+```
+
 
 ### Discusión
 
 #### A. Cantidad de establecimientos
-  Al comparar la cantidad de establecimientos por categoría notamos que la mayor cantidad corresponde a los de primera (8089), seguidos por los de la segunda (6011) y finalmente por los de tercera (5008), resulta interesante ver que hay 2503 establecimientos que no cuentan con una categoría.
-  Con respecto a la distribución de Conurbano e Interior, vemos que las cantidades son parecidas, 9839 y 11772 respectivamente.
-  Finalmente, si analizamos por ámbito, vemos que hay una gran diferencia entre la cantidad de establecimientos en el sector Urbano (el cual lleva la mayoría con 18458 establecimientos), con respecto a Rural Agrupado (1115) y Rural Disperso (2024). En el gráfico apenas se puede notar la inferencia de los establecimientos educativos en el sector itinerante ya que representan apenas una cantidad de 14 establecimientos.
-  
-  (Nota: podría ser interesante ver qué modalidad tienen esos 14 establecimientos itinerantes)
-  
+
+Al comparar la cantidad de establecimientos por categoría notamos que la mayor cantidad corresponde a los de primera (8089), seguidos por los de la segunda (6011) y finalmente por los de tercera (5008), resulta interesante ver que hay 2503 establecimientos que no cuentan con una categoría. Con respecto a la distribución de Conurbano e Interior, vemos que las cantidades son parecidas, 9839 y 11772 respectivamente. Finalmente, si analizamos por ámbito, vemos que hay una gran diferencia entre la cantidad de establecimientos en el sector Urbano (el cual lleva la mayoría con 18458 establecimientos), con respecto a Rural Agrupado (1115) y Rural Disperso (2024). En el gráfico apenas se puede notar la inferencia de los establecimientos educativos en el sector itinerante ya que representan apenas una cantidad de 14 establecimientos.
+
+(Nota: podría ser interesante ver qué modalidad tienen esos 14 establecimientos itinerantes)
+
 #### B. Relación entre matrícula y cantidad de secciones
 
-  
-
 ### Bibliografía
+
 ???
