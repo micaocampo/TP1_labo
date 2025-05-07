@@ -10,8 +10,12 @@ output:
 ---
 
 ### Introducción
-  En este trabajo práctico se interesa analizar datos relativos a la oferta de **establecimientos educativos** en la Provincia de Buenos Aires (PBA) y sus características. Los datos utilizados son provenientes de datos abiertos del Gobierno de la Provincia de Buenos Aires, específicamente, el conjunto de datos denominado *"Establecimientos educativos por modalidad y nivel"*, disponibles en el enlace: https://catalogo.datos.gba.gob.ar/dataset/establecimientos-educativos
-  
+ Los resultados en este informe son el producto de un análisis de datos relacionados a la oferta de establecimientos educativos en la Provincia de Buenos Aires, utilizaremos el Dataset "Establecimientos educativos por modalidad y nivel", que proviene de datos abiertos del Gobierno de la Provincia de Buenos Aires, y se pueden encontrar en el siguiente enlace: https://catalogo.datos.gba.gob.ar/dataset/establecimientos-educativos.
+ 
+
+ Nos interesa analizar como varía la oferta de establecimientos dependiendo de distintas características, como por ejemplo para ciertas ubicaciónes, turnos o modalidades. También informaremos sobre como se conforman en general los establecimientos, cuantos alumnos tienen y la división de estos en distintas secciones.
+
+
   En particular, nos interesa responder las siguientes preguntas: 
   
   A. ¿Cómo es la distribución de cantidad de establecimientos educativos en la PBA por categoría, área y ámbito? 
@@ -20,8 +24,12 @@ output:
   
   C. ¿Cuántos estudiantes y cuántas secciones tienen en promedio los establecimientos de una misma dependencia? ¿Cómo es la variabilidad? En especial, interesa analizar las dependencias que tengan más de 500 establecimientos bajo su órbita, mientras que el resto puede ser analizado en conjunto como una categoría “otro” (en referencia a otro tipo de dependencia). 
   
+  
   D. ¿Cómo se caracteriza la oferta de turnos para cada uno de los niveles educativos? ¿Varía según área, sector y el tipo de dependencia?
   
+  
+Utilizamos como herramienta principal el lenguaje de programacion R, R markdown y ggplot2 para los gráficos.
+
 
 ### Metodología
   Los resultados en este informe son producto del análisis basado en el DER(1) diseñado en función de los datos requeridos para responder las preguntas clave que nos fueron establecidas y de su mapeo correspondiente al modelo relacional(2).
