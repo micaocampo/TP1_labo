@@ -4,10 +4,13 @@ author: "Micaela Ocampo - Victoria Vega - Lucía Soave - Sabrina López"
 date: "09-05-2025"
 geometry: margin = 1.5 cm
 output:
- pdf_document: default
- html_document:
- df_print: paged
+  pdf_document:
+    df_print: paged
+  html_document: default
+header-includes:
+  - \usepackage{float}
 lang: es
+
 ---
 \newpage
 
@@ -99,6 +102,7 @@ Contamos como datos faltantes todos los casilleros que esten vacíos o que digan
 
 Podemos ver que en turnos y especialmente en categoría y secciones tenemos muchos datos faltantes, esto puede generar problemas en el momento de analizar los datos que nos interesan, ya que la información que obtengamos será más propensa a tener errores o problemas de exactitud.
 
+### Resultados
 #### Parte A. 
 
 Creamos un DER con los datos que vamos a utilizar para visualizar como se relacionan e interactúan las entidades entre sí.
@@ -113,7 +117,11 @@ Suponemos que:
 
 El mapeo del DER al modelo relacional se adjunta también a continuación:
 
-![Modelo relacional](Modelo_relacional.jpg){width=70%}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\textwidth]{Modelo_relacional.jpg}
+\caption{Modelo relacional}
+\end{figure}
 
 ------------------------------------------------------------------------
 
@@ -138,7 +146,7 @@ cant_establecimientos_ambito <- datos %>% #cantidad de establecimientos en funci
 
 A partir de los datos que tenemos, creamos gráficos que nos muestren la información.
 
-```{r, echo=FALSE, fig.align='center', fig.width=12, fig.height=4, fig.cap="Distribución de establecimientos por categoría, área y ámbito"}
+```{r, echo=FALSE, fig.align='center', fig.width=12, fig.height=4, fig.cap="Distribución de establecimientos por categoría, área y ámbito", fig.pos='H'}
 library(patchwork)
 
 # Gráfico 1: Categoría
@@ -175,7 +183,7 @@ En el caso del área, podemos ver una mayor cantidad de establecimientos en el i
 
 En el gráfico por ámbito podemos ver algo diferente a lo nombrado en los dos anteriores: hay un contraste muy grande entre los valores, ya que la mayoría de los establecimientos están en el ámbito urbano, mientras que podemos ver una linea casi imperceptible para Itinerante, que nos marca que hay muy pocos lugares que cumplen esta condición. Si vemos la tabla (Cuadro 2):
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, fig.pos='H'}
 knitr::kable((cant_establecimientos_ambito), caption = "Cantidad de establecimientos por ámbito")
 ```
 
@@ -185,7 +193,7 @@ Vemos el porque del gráfico, hay tan solo 14 establecimientos educativos Itiner
 
 Para determinar las relaciones entre la matrícula y la cantidad de secciones discriminando por modalidad, área y sector, fueron omitidos los siguientes 3 casos donde la matrícula es mayor a 4000 para poder comprender mejor la información proporcionada (cuadro 3).
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, fig.pos='H'}
 datos_matricula_omitidos <- datos %>%
   filter(matricula >= 4000) %>%
   select(establecimiento_id, modalidad, sector, dependencia, categoria, area, ambito, matricula, secciones)
@@ -200,7 +208,7 @@ secciones_sin_NA <- datos %>%
   filter(secciones != 0)
 ```
 
-```{r, echo=FALSE, fig.width=6, fig.height=3, fig.align='center', fig.cap="Relación entre matrícula y cantidad de secciones"}
+```{r, echo=FALSE, fig.width=6, fig.height=3, fig.align='center', fig.cap="Relación entre matrícula y cantidad de secciones", fig.pos='H'}
 ggplot(data = secciones_sin_NA, mapping = aes(x = matricula, y = secciones)) + 
   geom_point(alpha = 0.3, color = "blue") +
   labs(
@@ -210,14 +218,17 @@ ggplot(data = secciones_sin_NA, mapping = aes(x = matricula, y = secciones)) +
 
 promedio_matricula_secciones <- secciones_sin_NA %>%
   summarise(Promedio = mean(matricula)/mean(secciones))
+
+promedio_matricula_secciones_valor <- promedio_matricula_secciones$Promedio
 ```
 
-El promedio de la relación es `r promedio_matricula_secciones` matrículas por cada sección.
+El promedio de la relación es `r promedio_matricula_secciones_valor` estudiantes por cada sección.
 
-Podemos ver que la relación entre ambos parece lineal, es decir, mientras mas matrícula (número de estudiantes), más secciones.
+Podemos ver que la relación entre ambos parece lineal, mientras más matrícula (número de estudiantes), más secciones.
 
+Ahora, analizaremos cómo varía la relación dependiendo de la modalidad. Para esto miraremos la Figura 5.
 
-```{r, echo=FALSE, fig.width=8, fig.align='center', fig.cap="Relación entre matrícula y secciones discriminando por modalidad"}
+```{r, echo=FALSE, fig.width=8, fig.align='center', fig.cap="Relación entre matrícula y secciones discriminando por modalidad", fig.pos='H'}
 datos_matricula_filtrados <- secciones_sin_NA %>%
   filter(matricula < 4000)
 
@@ -227,13 +238,17 @@ ggplot(data = datos_matricula_filtrados, mapping = aes(x = matricula, y = seccio
     labs(
     title = "Matrícula y cantidad de secciones discriminado por modalidad",
     x = "Matrícula",
-    y = "Secciones")
+    y = "Secciones") +
+  theme(
+    legend.position = "bottom")
 
 ```
 
-Si bien todos los gráficos siguen la misma linealidad, podemos ver ciertas diferencias: la modalidad de Psicología Comunitaria y Pedagogía Social no hay establecimientos con mucha cantidad de matrícula o secciones. Además, podemos ver una linealidad más clara en el caso de Educación Técnico Profesional y Educación Física, y más disperso en el caso de Educación de Jóvenes y Adultos, Educación Común y Educación Artística, lo que implica que no es tan real la afirmación "a más matrícula, mayor número de secciones"
+Si bien todos los gráficos siguen la misma linealidad, podemos ver ciertas diferencias: la modalidad de Psicología Comunitaria y Pedagogía Social no hay establecimientos con mucha cantidad de matrícula o secciones. Además, podemos ver una linealidad más clara en el caso de Educación Técnico Profesional y Educación Física, y más disperso en el caso de Educación de Jóvenes y Adultos, Educación Común y Educación Artística, lo que implica que no es tan real la afirmación "a más matrícula, mayor número de secciones".
 
-```{r, echo=FALSE, fig.width=6, fig.height=3, fig.align='center', fig.cap="Relación entre matrícula y cantidad de secciones discriminando por área"}
+Ahora analizaremos la relación entre matrícula y cantidad de secciones discriminando por área. Para ello, realizamos el siguiente gráfico.
+
+```{r, echo=FALSE, fig.width=6, fig.height=3, fig.align='center', fig.cap="Relación entre matrícula y cantidad de secciones discriminando por área", fig.pos='H'}
 ggplot(data = datos_matricula_filtrados, mapping = aes(x = matricula, y = secciones, color = area)) + 
   geom_point(alpha = 0.3) +
   labs(
@@ -246,7 +261,9 @@ ggplot(data = datos_matricula_filtrados, mapping = aes(x = matricula, y = seccio
 
 En este caso podemos ver que ambas relaciones son muy parecidas, esto tiene sentido ya que haíamos visto que la diferencia entre la cantidad de establecimientos en el Conurbano y en el Interior no era tanto.
 
-```{r, echo=FALSE, fig.width=6, fig.height=3, fig.align='center', fig.cap="Relación entre matrícula y secciones discriminando por sector"}
+Finalmente, discriminaremos por sector mirando al siguiente gráfico.
+
+```{r, echo=FALSE, fig.width=6, fig.height=3, fig.align='center', fig.cap="Relación entre matrícula y secciones discriminando por sector", fig.pos='H'}
 ggplot(data = datos_matricula_filtrados, mapping = aes(x = matricula, y = secciones, color = sector)) + 
   geom_point(alpha = 0.3) +
   labs(
@@ -300,35 +317,34 @@ desvio_y_promedio_secciones <- tibble(
 )
 ```
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, fig.pos='H'}
 knitr::kable((desvio_y_promedio_matricula), caption = "Promedio y desvío de estudiantes respecto a la dependencia")
 ```
 
 
-```{r, echo = FALSE, fig.width=4, fig.height=3, fig.align='center', fig.cap="Relación entre matrícula y dependencia"}
-ggplot(data = datos_con_categorias, mapping = aes(x = dependencia_grupo, y = matricula)) +
+```{r, echo = FALSE, warning = FALSE, fig.width=8, fig.height=3, fig.align='center', fig.cap="Relación entre matrícula y dependencia (izq.). Relación entre matrículas menores a 2000 y dependencia (der.)", fig.pos='H'}
+g1 <- ggplot(data = datos_con_categorias, mapping = aes(x = dependencia_grupo, y = matricula)) +
   geom_violin() +
   geom_point(data = promedios, mapping = aes(x = dependencia_grupo, y = promedio_matricula), color = "skyblue", size = 3) +
   labs(
-    title = "Relación entre cantidad de estudiantes y dependencia",
+    title = "Relación entre matrícula y dependencia",
     x = "Dependencia",
-    y = "Estudiantes") 
+    y = "Matrícula") 
 
-```
-
-Con esto ya podemos ver ciertas diferencias y similitudes, pero lo agrandamos para ver mejor la variabilidad, en este caso los datos con mayor matrícula no serán tomados en cuenta.
-
-
-```{r, echo = FALSE, warning=FALSE, fig.width=4, fig.height=3, fig.align='center', fig.cap="Relación entre matrículas menores a 2000 y dependencia"}
-ggplot(data = datos_con_categorias, mapping = aes(x = dependencia_grupo, y = matricula)) +
+g2 <- ggplot(data = datos_con_categorias, mapping = aes(x = dependencia_grupo, y = matricula)) +
   geom_violin() +
   ylim(0, 2000) + 
   geom_point(data = promedios, mapping = aes(x = dependencia_grupo, y = promedio_matricula), color = "skyblue", size = 3)  +
   labs(
-    title = "Relación entre estudiantes y dependencia (agrandada)",
+    title = "Relación entre matrícula y dependencia",
     x = "Dependencia",
-    y = "Estudiantes") 
+    y = "Matrícula") 
+
+g1 + g2
 ```
+
+Con el gráfico de la izquierda ya podemos ver ciertas diferencias y similitudes, pero la agrandamos para ver mejor la variabilidad, en este caso los datos con mayor matrícula no serán tomados en cuenta.
+
 
 Detectamos que todos los tipos de dependencia tienen una mayor cantidad de casos con pocos estudiantes (menos de 1.000), y en especial los que tienen menos de 500 establecimientos son los que tienen los lugares con mayor cantidad de alumnos.
 Sin embargo, podemos notar diferencias (en el segundo gráfico podemos apreciarlo mejor), por ejemplo, en las dependencias "oficial" podemos ver una decandencia en la cantidad de establecimientos con una cantidad x de alumnos a medida que este número se hace más grande, a diferencia de "otro", donde podemos ver una cantidad muy centrada alrededor de 250 estudiantes aproximadamente, y una variación en la "privada".
@@ -336,41 +352,39 @@ Siendo que podemos ver claramente las diferencias entre la variacion de las depe
 
 --------------------------------------
 
-Ahora hacemos lo mismo para secciones: (cuadro 6)
+Ahora hacemos lo mismo para secciones: (cuadro 5)
 Tenemos en cuenta que todos los datos vacios de 0 secciones no están siendo utilizados para el gráfico ni para el cálculo.
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, fig.pos='H'}
 knitr::kable((desvio_y_promedio_secciones), caption = "Promedio y desvío de secciones respecto a la dependencia")
 ```
 
-```{r, echo = FALSE, fig.width=4, fig.height=3, fig.align='center', fig.cap="Relación entre secciones y dependencia"}
-ggplot(data = datos_con_categorias, mapping = aes(x = dependencia_grupo, y = secciones)) +
+```{r, echo = FALSE, warning = FALSE, fig.width=8, fig.height=3, fig.align='center', fig.cap="Relación entre secciones y dependencia (izq). Relación entre secciones menores a 100 y dependencia (der).", fig.pos='H'}
+gr1 <- ggplot(data = datos_con_categorias, mapping = aes(x = dependencia_grupo, y = secciones)) +
   geom_violin() +
   geom_point(data = promedios, mapping = aes(x = dependencia_grupo, y = promedio_secciones), color = "skyblue", size = 3) +
   labs(
     title = "Relación entre secciones y dependencia",
     x = "Dependencia",
     y = "Secciones")
-```
 
-Antes de analizar hagamos lo mismo que antes: Agrandemos.
-
-```{r, echo = FALSE, warning=FALSE, fig.width=4, fig.height=3, fig.cap="Relación entre secciones menores a 100 y dependencia"}
-ggplot(data = datos_con_categorias, mapping = aes(x = dependencia_grupo, y = secciones)) +
+gr2 <- ggplot(data = datos_con_categorias, mapping = aes(x = dependencia_grupo, y = secciones)) +
   geom_violin() +
   ylim(0, 100) + 
   geom_point(data = promedios, mapping = aes(x = dependencia_grupo, y = promedio_secciones), color = "skyblue", size = 3)  +
   labs(
-    title = "Relación entre secciones y dependencia (agrandada)",
+    title = "Relación entre secciones y dependencia",
     x = "Dependencia",
     y = "Secciones") 
+
+gr1 + gr2
 ```
 
-Para este gráfico podemos ver más variación ya que para la cantidad de secciones se maneja un número mucho más reducido que en el caso de estudiantes, pero podemos ver que en las 3 dependencias la mayoría de los establecimientos tienen menos de 25 secciones, y mientras en oficial también podemos ver una disminución a medida que la cantidad de secciones aumenta, en el caso de otro vemos una tendencia clara a los establecimientos con 6 secciones o menos, y para el caso de la privada hay más variación tendencia a dos números de secciones.
+Para este caso también agrandamos el gráfico para poder observar mejor la distribución. Aquí podemos ver mayor variación ya que para la cantidad de secciones se maneja un número mucho más reducido que en el caso de estudiantes, pero podemos ver que en las 3 dependencias la mayoría de los establecimientos tienen menos de 25 secciones, y mientras en oficial también podemos ver una disminución a medida que la cantidad de secciones aumenta, en el caso de otro vemos una tendencia clara a los establecimientos con 6 secciones o menos, y para el caso de la privada hay más variación tendencia a dos números de secciones.
 
 #### Parte C.
 
-### Ej 4.
+### Ejercicio 4.
 
 Para responder la pregunta "¿Cómo se caracteriza la oferta de turnos para cada uno de los niveles educativos? ¿Varía según área, sector y el tipo de dependencia?", procederíamos primero armando una tabla que exponga la oferta total para cada nivel. Como un establecimiento puede ofrecer varios turnos y varios niveles (debido a que en el DER puede observarse que la relación "ofrece" entre las entidades "establecimiento" y "turno" es "de muchos a muchos"), la observación que debería aparecer, para cada nivel, es la cantidad total de establecimientos que están relacionados simultáneamente con ese nivel y con el respectivo turno.
 
@@ -379,7 +393,7 @@ Luego, haríamos lo mismo pero discriminando por área, sector y, finalmente, el
 
 De esta manera, tendremos una buena manera de visualizar los datos para responder a la pregunta, ya que si lo haríamos con un único esquema no habría manera de discernir los ofrecimientos de turnos para cada atributo de la entidad que queremos evaluar. 
 
-### Ej 5.
+### Ejercicio 5.
 
 Queremos analizar la completitud del dato categoría asociado a los establecimientos de PBA, y para esto utilizaremos la metodología **Goal-Question_Metric(GQM)** que nos va a pedir cuantificar la calidad de los datos.
 
@@ -406,8 +420,8 @@ A partir de lo analizado, podemos concluir que la oferta de establecimientos edu
 
 ### Bibliografía
 
-https://r-graph-gallery.com/piechart-ggplot2.html
+1. The R Graph Gallery. (n.d.). *ggplot2 Piechart*. Recuperado de [https://r-graph-gallery.com/piechart-ggplot2.html](https://r-graph-gallery.com/piechart-ggplot2.html)
 
-https://haozhu233.github.io/kableExtra/
+2. Zhu, H. (n.d.). *kableExtra: Construct complex table with knitr::kable() + %>%*. Recuperado de [https://haozhu233.github.io/kableExtra/](https://haozhu233.github.io/kableExtra/)
 
-https://ggplot2-book.org/
+3. Wickham, H., Navarro, D., & Pedersen, T. L. (n.d.). *ggplot2: Elegant Graphics for Data Analysis (3rd ed.)*. Recuperado de [https://ggplot2-book.org/](https://ggplot2-book.org/)
