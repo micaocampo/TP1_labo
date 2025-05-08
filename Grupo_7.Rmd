@@ -7,6 +7,7 @@ output:
  pdf_document: default
  html_document:
  df_print: paged
+lang: es
 ---
 \newpage
 
@@ -120,47 +121,51 @@ El mapeo del DER al modelo relacional se adjunta también a continuación:
 ```{r, echo = FALSE}
 cant_establecimientos_categoria <- datos %>% #cantidad de establecimientos en función de la categoría
   group_by(categoria) %>%
-  summarise(count=n())
+  summarise(cantidad=n())
 
 cant_establecimientos_area <- datos %>% #cantidad de establecimientos en función del area
   group_by(area) %>%
-  summarise(count=n())
+  summarise(cantidad=n())
 
 cant_establecimientos_ambito <- datos %>% #cantidad de establecimientos en función del ámbito
   group_by(ambito) %>%
-  summarise(count=n())
+  summarise(cantidad=n())
 
 ```
 
 A partir de los datos que tenemos, creamos gráficos que nos muestren la información.
 
-```{r, echo = FALSE, fig.width=4, fig.height=3}
-ggplot(data = cant_establecimientos_categoria, mapping = aes(x = "", y = count, fill = categoria)) + 
+```{r, echo=FALSE, fig.align='center', fig.width=12, fig.height=4, fig.cap="Distribución de establecimientos por categoría, área y ámbito"}
+library(patchwork)
+
+# Gráfico 1: Categoría
+g1 <- ggplot(cant_establecimientos_categoria, aes(x = "", y = cantidad, fill = categoria)) +
   geom_bar(stat = "identity", width = 1, color = "white") +
   coord_polar("y", start = 0) +
   theme_void() +
-  labs(title = "Cantidad de establecimientos por categoría", fill = "Categoría")
+  labs(title = "Categoría", fill = "Categoría")
 
-```
-
-```{r, echo = FALSE, fig.width=4, fig.height=3}
-ggplot(data = cant_establecimientos_area, mapping = aes(x = "", y = count, fill = area)) +
+# Gráfico 2: Área
+g2 <- ggplot(cant_establecimientos_area, aes(x = "", y = cantidad, fill = area)) +
   geom_bar(stat = "identity", width = 1, color = "white") +
   coord_polar("y", start = 0) +
   theme_void() +
-  labs(title = "Cantidad de establecimientos por área", fill = "Área")
+  labs(title = "Área", fill = "Área")
 
-```
-
-```{r, echo = FALSE, fig.width=4, fig.height=3}
-ggplot(data = cant_establecimientos_ambito, mapping = aes(x = "", y = count, fill = ambito)) +
+# Gráfico 3: Ámbito
+g3 <- ggplot(cant_establecimientos_ambito, aes(x = "", y = cantidad, fill = ambito)) +
   geom_bar(stat = "identity", width = 1) +
   coord_polar("y", start = 0) +
   theme_void() +
-  labs(title = "Cantidad de establecimientos por ámbito", fill = "Ámbito") +
-  scale_fill_manual(values = c("Itinerante" = "black", "Rural Agrupado" = "gold", "Rural Disperso" = "turquoise", "Urbano" = "plum"))
-```
+  labs(title = "Ámbito", fill = "Ámbito") +
+  scale_fill_manual(values = c("Itinerante" = "black",
+                               "Rural Agrupado" = "gold",
+                               "Rural Disperso" = "turquoise",
+                               "Urbano" = "plum"))
 
+# Mostrar los tres gráficos juntos
+(g1 | g2 | g3)
+```
 Vemos que en el caso de la cantidad de establecimientos según la categoría, tenemos una mayoría de Primera categoría, seguido de cerca por la segunda y la tercera; sin embargo, vemos que los datos faltantes son una cantidad considerable respecto a los demás datos, estos pueden marcar una gran diferencia en el análisis ya que podrían revertir los resultados que obtuvimos.
 
 En el caso del área, podemos ver una mayor cantidad de establecimientos en el interior, si bien es una diferencia significativa, podría ser aún mayor.
@@ -192,7 +197,7 @@ secciones_sin_NA <- datos %>%
   filter(secciones != 0)
 ```
 
-```{r, echo=FALSE, fig.width=6, fig.height=3}
+```{r, echo=FALSE, fig.width=6, fig.height=3, fig.align='center', fig.cap="Relación entre matrícula y cantidad de secciones"}
 ggplot(data = secciones_sin_NA, mapping = aes(x = matricula, y = secciones)) + 
   geom_point(alpha = 0.3, color = "blue") +
   labs(
@@ -209,7 +214,7 @@ El promedio de la relación es `r promedio_matricula_secciones` matrículas por 
 Podemos ver que la relación entre ambos parece lineal, es decir, mientras mas matrícula (número de estudiantes), más secciones.
 
 
-```{r, echo=FALSE, fig.width=8}
+```{r, echo=FALSE, fig.width=8, fig.align='center', fig.cap="Relación entre matrícula y secciones discriminando por modalidad"}
 datos_matricula_filtrados <- secciones_sin_NA %>%
   filter(matricula < 4000)
 
@@ -225,7 +230,7 @@ ggplot(data = datos_matricula_filtrados, mapping = aes(x = matricula, y = seccio
 
 Si bien todos los gráficos siguen la misma linealidad, podemos ver ciertas diferencias: la modalidad de Psicología Comunitaria y Pedagogía Social no hay establecimientos con mucha cantidad de matrícula o secciones. Además, podemos ver una linealidad más clara en el caso de Educación Técnico Profesional y Educación Física, y más disperso en el caso de Educación de Jóvenes y Adultos, Educación Común y Educación Artística, lo que implica que no es tan real la afirmación "a más matrícula, mayor número de secciones"
 
-```{r, echo=FALSE, fig.width=6, fig.height=3}
+```{r, echo=FALSE, fig.width=6, fig.height=3, fig.align='center', fig.cap="Relación entre matrícula y cantidad de secciones discriminando por área"}
 ggplot(data = datos_matricula_filtrados, mapping = aes(x = matricula, y = secciones, color = area)) + 
   geom_point(alpha = 0.3) +
   labs(
@@ -238,7 +243,7 @@ ggplot(data = datos_matricula_filtrados, mapping = aes(x = matricula, y = seccio
 
 En este caso podemos ver que ambas relaciones son muy parecidas, esto tiene sentido ya que haíamos visto que la diferencia entre la cantidad de establecimientos en el Conurbano y en el Interior no era tanto.
 
-```{r, echo=FALSE, fig.width=6, fig.height=3}
+```{r, echo=FALSE, fig.width=6, fig.height=3, fig.align='center', fig.cap="Relación entre matrícula y secciones discriminando por sector"}
 ggplot(data = datos_matricula_filtrados, mapping = aes(x = matricula, y = secciones, color = sector)) + 
   geom_point(alpha = 0.3) +
   labs(
@@ -295,12 +300,12 @@ knitr::kable((desvio_y_promedio_matricula), caption = "Promedio y desvío de est
 ```
 
 
-```{r, echo = FALSE, fig.width=4, fig.height=3}
+```{r, echo = FALSE, fig.width=4, fig.height=3, fig.align='center', fig.cap="Relación entre matrícula y dependencia"}
 ggplot(data = datos_con_categorias, mapping = aes(x = dependencia_grupo, y = matricula)) +
   geom_violin() +
   geom_point(data = promedios, mapping = aes(x = dependencia_grupo, y = promedio_matricula), color = "skyblue", size = 3) +
   labs(
-    title = "Relación entre estudiantes y dependencia",
+    title = "Relación entre cantidad de estudiantes y dependencia",
     x = "Dependencia",
     y = "Estudiantes") 
 
@@ -309,7 +314,7 @@ ggplot(data = datos_con_categorias, mapping = aes(x = dependencia_grupo, y = mat
 Con esto ya podemos ver ciertas diferencias y similitudes, pero lo agrandamos para ver mejor la variabilidad, en este caso los datos con mayor matrícula no serán tomados en cuenta.
 
 
-```{r, echo = FALSE, warning=FALSE, fig.width=4, fig.height=3}
+```{r, echo = FALSE, warning=FALSE, fig.width=4, fig.height=3, fig.align='center', fig.cap="Relación entre matrículas menores a 2000 y dependencia"}
 ggplot(data = datos_con_categorias, mapping = aes(x = dependencia_grupo, y = matricula)) +
   geom_violin() +
   ylim(0, 2000) + 
@@ -333,7 +338,7 @@ Tenemos en cuenta que todos los datos vacios de 0 secciones no están siendo uti
 knitr::kable((desvio_y_promedio_secciones), caption = "Promedio y desvío de secciones respecto a la dependencia")
 ```
 
-```{r, echo = FALSE, fig.width=4, fig.height=3}
+```{r, echo = FALSE, fig.width=4, fig.height=3, fig.align='center', fig.cap="Relación entre secciones y dependencia"}
 ggplot(data = datos_con_categorias, mapping = aes(x = dependencia_grupo, y = secciones)) +
   geom_violin() +
   geom_point(data = promedios, mapping = aes(x = dependencia_grupo, y = promedio_secciones), color = "skyblue", size = 3) +
@@ -345,7 +350,7 @@ ggplot(data = datos_con_categorias, mapping = aes(x = dependencia_grupo, y = sec
 
 Antes de analizar hagamos lo mismo que antes: Agrandemos.
 
-```{r, echo = FALSE, warning=FALSE, fig.width=4, fig.height=3}
+```{r, echo = FALSE, warning=FALSE, fig.width=4, fig.height=3, fig.cap="Relación entre secciones menores a 100 y dependencia"}
 ggplot(data = datos_con_categorias, mapping = aes(x = dependencia_grupo, y = secciones)) +
   geom_violin() +
   ylim(0, 100) + 
