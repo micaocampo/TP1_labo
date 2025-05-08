@@ -396,7 +396,7 @@ la completitud de esta variable es aproximadamente del 89%, es bastante poco y e
 
 
 ### Discusión
-
+A partir de lo analizado, podemos concluir que la oferta de establecimientos educativos en la provincia de Buenos Aires tiene una gran variabilidad. La distribución de los mismos fluctúa en cantidad dependiendo si discernimos entre su categoría, el área al que pertenecen y a su ámbito. Además, en general, podemos observar que existe una relación creciente entre la matrícula y cantidad de secciones de los establecimientos que se mantiene al diferenciarlos según los distintos atributos. También pudimos observar que la distribución de matrícula entre distintas dependencias que tienen a más de 500 establecimientos bajo su órbita se encuentra mayormente dentro del rango de 0 a 500 estudiantes, siendo la minoría aquellos que cuentan con una matrícula mayor. Finalmente, al realizar un análisis similar pero con la distribución de secciones, pudimos ver que la mayoría de los establecimientos poseen un rango de secciones de entre 1 a 25, siendo aquellos que poseen mayor cantidad una clara minoría.
 
 
 ### Bibliografía
