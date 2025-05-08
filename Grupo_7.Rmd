@@ -391,3 +391,9 @@ la completitud de esta variable es aproximadamente del 89%, es bastante poco y e
 
 
 ### Bibliografía
+
+https://r-graph-gallery.com/piechart-ggplot2.html
+
+https://haozhu233.github.io/kableExtra/
+
+https://ggplot2-book.org/
