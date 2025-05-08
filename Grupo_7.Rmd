@@ -383,7 +383,7 @@ proporcion <- datos_faltantes_categoria/datos_establecimientos
 ```
 = `r datos_faltantes_categoria` / `r datos_establecimientos` = `r datos_faltantes_categoria/ datos_establecimientos`
 
-la completitud de esta variable es aproximadamente del 89%, es bastante poco y eso hace que nuestro análisis sobre esa variable pierda exactitud, pero igualmente no imposiblita nuestro análisis ya que no siempre se espera una completitud total.
+la completitud de esta variable es aproximadamente del 89%, es bastante poco y eso hace que nuestro análisis sobre esa variable pierda exactitud, pero igualmente no lo imposiblita ya que, no siempre se espera una completitud total.
 
 
 ### Discusión
