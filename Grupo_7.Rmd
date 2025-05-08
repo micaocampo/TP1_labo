@@ -64,16 +64,15 @@ library(dplyr)
 library(ggplot2)
 library(kableExtra)
 
-datos <- read.csv("establecimientos_educativos.csv", header = T, sep=",", dec=".")
+datos <- read.csv("establecimientos-educativos-28042025.csv", header = T, sep=",", dec=".")
 
 datos <- datos %>%
   select(establecimiento_id, establecimiento_nombre, modalidad, nivel, sector, dependencia, categoria, area, ambito, matricula, secciones, turnos)
 
 ```
 
-Obtenemos el data frame con los datos sobre los establecimientos educativos, y vemos si hay datos faltantes:
+Obtenemos el data frame con los datos sobre los establecimientos educativos, y vemos si hay datos faltantes (cuadro 1):
 
-Contamos como datos faltantes todos los casilleros que esten vacíos o que digan S/Datos, además, los turnos que incluyen "SIN INFORMACIÓN" y las secciones con numero 0, ya que lo tomamos como dato vacío, pues en el caso de no estar dividido por secciones, se lo considera con 1 sección.
 
 ```{r, echo=FALSE}
 datos_faltantes <- colSums(is.na(datos) |
@@ -93,6 +92,10 @@ datos_faltantes["secciones"] <- sum(datos$secciones == 0)
 
 knitr::kable((datos_faltantes), caption = "Datos faltantes")
 ```
+
+
+
+Contamos como datos faltantes todos los casilleros que esten vacíos o que digan S/Datos, además, los turnos que incluyen "SIN INFORMACIÓN" y las secciones con numero 0, ya que lo tomamos como dato vacío, pues en el caso de no estar dividido por secciones, se lo considera con 1 sección.
 
 Podemos ver que en turnos y especialmente en categoría y secciones tenemos muchos datos faltantes, esto puede generar problemas en el momento de analizar los datos que nos interesan, ya que la información que obtengamos será más propensa a tener errores o problemas de exactitud.
 
@@ -170,7 +173,7 @@ Vemos que en el caso de la cantidad de establecimientos según la categoría, te
 
 En el caso del área, podemos ver una mayor cantidad de establecimientos en el interior, si bien es una diferencia significativa, podría ser aún mayor.
 
-En el gráfico por ámbito podemos ver algo diferente a lo nombrado en los dos anteriores: hay un contraste muy grande entre los valores, ya que la mayoría de los establecimientos están en el ámbito urbano, mientras que podemos ver una linea casi imperceptible para Itinerante, que nos marca que hay muy pocos lugares que cumplen esta condición. Si vemos la tabla:
+En el gráfico por ámbito podemos ver algo diferente a lo nombrado en los dos anteriores: hay un contraste muy grande entre los valores, ya que la mayoría de los establecimientos están en el ámbito urbano, mientras que podemos ver una linea casi imperceptible para Itinerante, que nos marca que hay muy pocos lugares que cumplen esta condición. Si vemos la tabla (Cuadro 2):
 
 ```{r, echo = FALSE}
 knitr::kable((cant_establecimientos_ambito), caption = "Cantidad de establecimientos por ámbito")
@@ -180,7 +183,7 @@ Vemos el porque del gráfico, hay tan solo 14 establecimientos educativos Itiner
 
 #### Pregunta B. Relación entre matrícula y cantidad de secciones
 
-Para determinar las relaciones entre la matrícula y la cantidad de secciones discriminando por modalidad, área y sector, fueron omitidos los siguientes 3 casos donde la matrícula es mayor a 4000 para poder comprender mejor la información proporcionada:
+Para determinar las relaciones entre la matrícula y la cantidad de secciones discriminando por modalidad, área y sector, fueron omitidos los siguientes 3 casos donde la matrícula es mayor a 4000 para poder comprender mejor la información proporcionada (cuadro 3).
 
 ```{r, echo=FALSE}
 datos_matricula_omitidos <- datos %>%
@@ -260,6 +263,8 @@ En este último podemos ver que la cantidad de matrículas y de secciones en el 
 
 Para responder esta pregunta utilizamos un diseño de tipo violin que nos permite ver cuando hay más cantidad de casos. El punto celeste nos índica el promedio, igualmente dejamos este último a continuación, incluyendo el desvío.
 
+También incluímos los datos numéricos del desvío y el promedio para poder comparar (cuadro 4)
+
 ```{r, echo = FALSE}
 conteo_dependencia <- secciones_sin_NA %>%
   count(dependencia, name = "cantidad")
@@ -331,7 +336,7 @@ Siendo que podemos ver claramente las diferencias entre la variacion de las depe
 
 --------------------------------------
 
-Ahora hacemos lo mismo para secciones: 
+Ahora hacemos lo mismo para secciones: (cuadro 6)
 Tenemos en cuenta que todos los datos vacios de 0 secciones no están siendo utilizados para el gráfico ni para el cálculo.
 
 ```{r, echo = FALSE}
