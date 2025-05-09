@@ -16,9 +16,9 @@ lang: es
 
 ### Introducción
 
-Los resultados en este informe son el producto de un análisis de datos relacionados a la oferta de establecimientos educativos en la Provincia de Buenos Aires, utilizaremos el Dataset "Establecimientos educativos por modalidad y nivel", que proviene de datos abiertos del Gobierno de la Provincia de Buenos Aires, y se pueden encontrar en el siguiente enlace: <https://catalogo.datos.gba.gob.ar/dataset/establecimientos-educativos>. Este dataset contiene 21.611 observaciones, cada una correspondiente a un establecimiento educativo diferente. Se registran un total de 35 variables, que proporcionan información sobre cada establecimiento, tales como su nombre, ubicación, nivel educativo, entre otras características. Para este informe, se trabajará únicamente con 12 de estas 35 variables, las cuales se detallan a continuación.
+Los resultados en este informe son el producto de un análisis de datos relacionados a la oferta de establecimientos educativos en la Provincia de Buenos Aires. Utilizaremos el Dataset "Establecimientos educativos por modalidad y nivel", que proviene de datos abiertos del Gobierno de la Provincia de Buenos Aires, y se pueden encontrar en el siguiente enlace: <https://catalogo.datos.gba.gob.ar/dataset/establecimientos-educativos>. Este dataset contiene 21.611 observaciones, cada una correspondiente a un establecimiento educativo diferente. Se registran un total de 35 variables, que proporcionan información sobre cada establecimiento, tales como su nombre, ubicación, nivel educativo, entre otras características. Para este informe, se trabajará únicamente con 12 de estas 35 variables, las cuales se detallan a continuación.
 
-Nos interesa analizar como varía la oferta de establecimientos dependiendo de distintas características, como por ejemplo para ciertas ubicaciónes, turnos o modalidades. También informaremos sobre como se conforman en general los establecimientos, cuantos alumnos tienen y la división de estos en distintas secciones.
+Nos interesa analizar como varía la oferta de establecimientos dependiendo de distintas características, como por ejemplo para ciertas ubicaciones, turnos o modalidades. También informaremos sobre cómo se conforman en general los establecimientos, cuántos alumnos tienen y la división de estos en distintas secciones.
 
 En particular, nos interesa responder las siguientes preguntas:
 
@@ -98,14 +98,14 @@ knitr::kable((datos_faltantes), caption = "Datos faltantes")
 
 
 
-Contamos como datos faltantes todos los casilleros que esten vacíos o que digan S/Datos, además, los turnos que incluyen "SIN INFORMACIÓN" y las secciones con numero 0, ya que lo tomamos como dato vacío, pues en el caso de no estar dividido por secciones, se lo considera con 1 sección.
+Contamos como datos faltantes todos los casilleros que esten vacíos o que digan S/Datos, además, los turnos que incluyen "SIN INFORMACIÓN" y las secciones con número 0, ya que lo tomamos como dato vacío, pues en el caso de no estar dividido por secciones, se lo considera con 1 sección.
 
 Podemos ver que en turnos y especialmente en categoría y secciones tenemos muchos datos faltantes, esto puede generar problemas en el momento de analizar los datos que nos interesan, ya que la información que obtengamos será más propensa a tener errores o problemas de exactitud.
 
 ### Resultados
 #### Parte A. 
 
-Creamos un DER con los datos que vamos a utilizar para visualizar como se relacionan e interactúan las entidades entre sí.
+Creamos un DER con los datos que vamos a utilizar para visualizar cómo se relacionan e interactúan las entidades entre sí.
 
 ![DER](DER.jpg){width=60%}
 
@@ -179,7 +179,7 @@ g3 <- ggplot(cant_establecimientos_ambito, aes(x = "", y = cantidad, fill = ambi
 ```
 Vemos que en el caso de la cantidad de establecimientos según la categoría, tenemos una mayoría de Primera categoría, seguido de cerca por la segunda y la tercera; sin embargo, vemos que los datos faltantes son una cantidad considerable respecto a los demás datos, estos pueden marcar una gran diferencia en el análisis ya que podrían revertir los resultados que obtuvimos.
 
-En el caso del área, podemos ver una mayor cantidad de establecimientos en el interior, si bien es una diferencia significativa, podría ser aún mayor.
+En el caso del área, podemos observar que una mayor cantidad de establecimientos se encuentran en el interior de la provincia de Buenos Aires.
 
 En el gráfico por ámbito podemos ver algo diferente a lo nombrado en los dos anteriores: hay un contraste muy grande entre los valores, ya que la mayoría de los establecimientos están en el ámbito urbano, mientras que podemos ver una linea casi imperceptible para Itinerante, que nos marca que hay muy pocos lugares que cumplen esta condición. Si vemos la tabla (Cuadro 2):
 
@@ -187,7 +187,7 @@ En el gráfico por ámbito podemos ver algo diferente a lo nombrado en los dos a
 knitr::kable((cant_establecimientos_ambito), caption = "Cantidad de establecimientos por ámbito")
 ```
 
-Vemos el porque del gráfico, hay tan solo 14 establecimientos educativos Itinerantes, mientras que urbanos, hay mas de 18.000.
+Vemos el porqué del gráfico: hay tan sólo 14 establecimientos educativos Itinerantes, mientras que en urbanos hay más de 18.000.
 
 #### Pregunta B. Relación entre matrícula y cantidad de secciones
 
@@ -222,7 +222,7 @@ promedio_matricula_secciones <- secciones_sin_NA %>%
 promedio_matricula_secciones_valor <- promedio_matricula_secciones$Promedio
 ```
 
-El promedio de la relación es `r promedio_matricula_secciones_valor` estudiantes por cada sección.
+En promedio, podemos observar que tenemos `r promedio_matricula_secciones_valor` estudiantes por cada sección.
 
 Podemos ver que la relación entre ambos parece lineal, mientras más matrícula (número de estudiantes), más secciones.
 
@@ -244,7 +244,7 @@ ggplot(data = datos_matricula_filtrados, mapping = aes(x = matricula, y = seccio
 
 ```
 
-Si bien todos los gráficos siguen la misma linealidad, podemos ver ciertas diferencias: la modalidad de Psicología Comunitaria y Pedagogía Social no hay establecimientos con mucha cantidad de matrícula o secciones. Además, podemos ver una linealidad más clara en el caso de Educación Técnico Profesional y Educación Física, y más disperso en el caso de Educación de Jóvenes y Adultos, Educación Común y Educación Artística, lo que implica que no es tan real la afirmación "a más matrícula, mayor número de secciones".
+Si bien todos los gráficos siguen la misma linealidad, podemos ver ciertas diferencias: en la modalidad de Psicología Comunitaria y Pedagogía Social no hay establecimientos con gran cantidad de alumnos y secciones. Además, podemos ver una linealidad más clara en el caso de Educación Técnico Profesional y Educación Física, y una relación más dispersa en el caso de Educación de Jóvenes y Adultos, Educación Común y Educación Artística. Esto implica quela afirmación "a mayor matrícula, mayor número de secciones", en realidad  puede no ser cierta en algunos casos.
 
 Ahora analizaremos la relación entre matrícula y cantidad de secciones discriminando por área. Para ello, realizamos el siguiente gráfico.
 
@@ -259,7 +259,7 @@ ggplot(data = datos_matricula_filtrados, mapping = aes(x = matricula, y = seccio
 
 ```
 
-En este caso podemos ver que ambas relaciones son muy parecidas, esto tiene sentido ya que haíamos visto que la diferencia entre la cantidad de establecimientos en el Conurbano y en el Interior no era tanto.
+En este caso podemos ver que ambas relaciones son muy parecidas, esto tiene sentido ya que habíamos visto que la diferencia entre la cantidad de establecimientos en el Conurbano y en el Interior no era significativa.
 
 Finalmente, discriminaremos por sector mirando al siguiente gráfico.
 
@@ -278,9 +278,9 @@ En este último podemos ver que la cantidad de matrículas y de secciones en el 
 
 #### Pregunta C.
 
-Para responder esta pregunta utilizamos un diseño de tipo violin que nos permite ver cuando hay más cantidad de casos. El punto celeste nos índica el promedio, igualmente dejamos este último a continuación, incluyendo el desvío.
+Para responder esta pregunta utilizamos un diseño "de tipo violin" que nos permite ver bien la distribución de los datos. El punto celeste nos indica dónde se encuentra el promedio en cada caso.
 
-También incluímos los datos numéricos del desvío y el promedio para poder comparar (cuadro 4)
+También incluímos los datos numéricos del desvío y el promedio para poder comparar (cuadro 4).
 
 ```{r, echo = FALSE}
 conteo_dependencia <- secciones_sin_NA %>%
@@ -343,17 +343,17 @@ g2 <- ggplot(data = datos_con_categorias, mapping = aes(x = dependencia_grupo, y
 g1 + g2
 ```
 
-Con el gráfico de la izquierda ya podemos ver ciertas diferencias y similitudes, pero la agrandamos para ver mejor la variabilidad, en este caso los datos con mayor matrícula no serán tomados en cuenta.
+Con el gráfico de la izquierda ya podemos ver ciertas diferencias y similitudes, pero la agrandamos para ver mejor la variabilidad. En este último caso los datos con mayor matrícula no serán tomados en cuenta.
 
 
 Detectamos que todos los tipos de dependencia tienen una mayor cantidad de casos con pocos estudiantes (menos de 1.000), y en especial los que tienen menos de 500 establecimientos son los que tienen los lugares con mayor cantidad de alumnos.
-Sin embargo, podemos notar diferencias (en el segundo gráfico podemos apreciarlo mejor), por ejemplo, en las dependencias "oficial" podemos ver una decandencia en la cantidad de establecimientos con una cantidad x de alumnos a medida que este número se hace más grande, a diferencia de "otro", donde podemos ver una cantidad muy centrada alrededor de 250 estudiantes aproximadamente, y una variación en la "privada".
-Siendo que podemos ver claramente las diferencias entre la variacion de las dependencias, todos los promedios son muy cercanos entre sí, por esta razón es interesante ver otros datos además de este: el desvío nos muestra que los datos no son tan similares como parecen a primera vista.
+Sin embargo, podemos notar diferencias que pueden ser apreciadas en el gráfico de la derecha. Por ejemplo, en las dependencias "oficial" podemos ver un descenso en la cantidad de establecimientos con una cantidad x de alumnos a medida que este número x se hace más grande. Por otro lado, en la categoría "otro" podemos ver una cantidad muy centrada alrededor de 250 estudiantes aproximadamente, y una mayor variación en la "privada".
+A pesar de que podamos ver claramente las diferencias entre la variacion de las dependencias, todos los promedios son muy cercanos entre sí. Por esta razón es interesante analizar otros datos además de éste: el desvío, por ejemplo, nos muestra que los datos no son tan similares como parecieran si sólo se observara el promedio.
 
 --------------------------------------
 
 Ahora hacemos lo mismo para secciones: (cuadro 5)
-Tenemos en cuenta que todos los datos vacios de 0 secciones no están siendo utilizados para el gráfico ni para el cálculo.
+Tenemos en cuenta que todos los datos vacíos de 0 secciones no están siendo utilizados para el gráfico ni para el cálculo.
 
 ```{r, echo = FALSE, fig.pos='H'}
 knitr::kable((desvio_y_promedio_secciones), caption = "Promedio y desvío de secciones respecto a la dependencia")
@@ -380,7 +380,7 @@ gr2 <- ggplot(data = datos_con_categorias, mapping = aes(x = dependencia_grupo, 
 gr1 + gr2
 ```
 
-Para este caso también agrandamos el gráfico para poder observar mejor la distribución. Aquí podemos ver mayor variación ya que para la cantidad de secciones se maneja un número mucho más reducido que en el caso de estudiantes, pero podemos ver que en las 3 dependencias la mayoría de los establecimientos tienen menos de 25 secciones, y mientras en oficial también podemos ver una disminución a medida que la cantidad de secciones aumenta, en el caso de otro vemos una tendencia clara a los establecimientos con 6 secciones o menos, y para el caso de la privada hay más variación tendencia a dos números de secciones.
+En este caso también agrandamos el gráfico para poder observar mejor la distribución. Aquí podemos ver mayor variación, ya que para la cantidad de secciones se maneja un número mucho más reducido que en el caso de matrícula. Podemos ver que en las 3 dependencias la mayoría de los establecimientos tienen menos de 25 secciones, mientras que en "oficial" también podemos ver una disminución a medida que la cantidad de secciones aumenta. En el caso de "otro", vemos una tendencia clara de los establecimientos a tener 6 secciones o menos, y para el caso de la dependencia "privada" hay una mayor variación en el número de secciones para los establecimientos.
 
 #### Parte C.
 
@@ -411,7 +411,7 @@ proporcion <- datos_faltantes_categoria/datos_establecimientos
 ```
 = `r datos_faltantes_categoria` / `r datos_establecimientos` = `r datos_faltantes_categoria/ datos_establecimientos`
 
-la completitud de esta variable es aproximadamente del 89%, es bastante poco y eso hace que nuestro análisis sobre esa variable pierda exactitud, pero igualmente no lo imposiblita ya que, no siempre se espera una completitud total.
+La completitud de esta variable es aproximadamente del 89%. Este es un número relativamente bajo y eso hace que nuestro análisis sobre esa variable pierda exactitud, pero igualmente no lo imposiblita ya que no siempre se espera una completitud total.
 
 
 ### Discusión
